@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+
+  mysql-dump:
+    image: ovski/ansible:v2.8.2
+    volumes:
+      - /path/to/folder:/var/folder
+      - ./:/var/www/ansible/playbooks/mysql-dump
+    command: >
+      ansible-playbook /var/www/ansible/playbooks/mysql-dump/main.yml
+        -e "mysql_dumps_target_folder=/var/folder/mysql_dumps"
+        -e "prune=yes"
+        -e "db_user=mydbuser"
+        -e "db_password=mypass"
+        -e "db_host=dbalias.domain.net"
+        -e "db_name=mydbname"
+    environment:
+      - ANSIBLE_HOST_KEY_CHECKING=False

@@ -1,0 +1,43 @@
+---
+- name: Create a mysql dump
+  hosts: localhost
+  vars:
+    delete_old_files: "{{ prune | default('no') }}"
+
+  tasks:
+
+    - name: PyMySql is present
+      pip: 
+        name: PyMySql
+
+    - name: mysql-dump is present
+      apt: 
+        name: mysql-client
+
+    - name: The mysql_dump target folder is present
+      file:
+        path: "{{ mysql_dumps_target_folder }}"
+        state: directory
+
+    - name: Dump the database
+      mysql_db:
+        state: dump
+        login_user: "{{ db_user }}"
+        login_password: "{{ db_password }}"
+        login_host: "{{ db_host | default('localhost') }}"
+        name: "{{ db_name }}"
+        target: "{{ mysql_dumps_target_folder }}/{{ db_name }}-{{ lookup('pipe','date +%Y-%m-%d_%H-%M-%S') }}.sql"
+
+    - name: Find dumps older than 7 days
+      find:
+        paths: "{{ mysql_dumps_target_folder }}"
+        age: 7d
+      register: files_to_delete
+      when: delete_old_files == "yes"
+
+    - name: Delete previously found dumps
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ files_to_delete.files }}"
+      when: delete_old_files == "yes"
