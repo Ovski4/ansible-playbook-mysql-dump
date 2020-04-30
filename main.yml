@@ -12,7 +12,7 @@
 
     - name: mysql-dump is present
       apt: 
-        name: mysql-client
+        name: mariadb-client
 
     - name: The mysql_dump target folder is present
       file:
