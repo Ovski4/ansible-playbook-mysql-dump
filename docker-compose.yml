@@ -15,5 +15,3 @@ services:
         -e "db_password=mypass"
         -e "db_host=dbalias.domain.net"
         -e "db_name=mydbname"
-    environment:
-      - ANSIBLE_HOST_KEY_CHECKING=False
