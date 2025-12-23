@@ -1,7 +1,7 @@
 Mysql dump
 ==========
 
-This playbook will dump a mysql database in a folder and delete dumps older than 7 days if prune is set to yes
+This playbook will dump a mysql database in a folder and delete dumps older than 7 days if prune is set to yes.
 
 Usage example
 -------------

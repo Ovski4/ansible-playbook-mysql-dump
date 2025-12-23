@@ -27,6 +27,7 @@
         login_host: "{{ db_host | default('localhost') }}"
         name: "{{ db_name }}"
         target: "{{ mysql_dumps_target_folder }}/{{ db_name }}-{{ lookup('pipe','date +%Y-%m-%d_%H-%M-%S') }}.sql"
+        dump_extra_args: "--single-transaction --skip-ssl"
 
     - name: Find dumps older than 7 days
       ansible.builtin.find:
