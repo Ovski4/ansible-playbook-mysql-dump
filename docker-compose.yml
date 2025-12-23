@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   mysql-dump:
-    image: ovski/ansible:2.13.3
+    image: ovski/ansible:2.20.0
     volumes:
       - /path/to/folder:/var/folder
       - ./:/var/www/ansible/playbooks/mysql-dump

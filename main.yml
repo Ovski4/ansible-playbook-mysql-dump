@@ -7,20 +7,20 @@
   tasks:
 
     - name: PyMySql is present
-      pip: 
+      ansible.builtin.pip:
         name: PyMySql
 
     - name: mysql-dump is present
-      apt: 
+      ansible.builtin.apt:
         name: mariadb-client
 
     - name: The mysql_dump target folder is present
-      file:
+      ansible.builtin.file:
         path: "{{ mysql_dumps_target_folder }}"
         state: directory
 
     - name: Dump the database
-      mysql_db:
+      community.mysql.mysql_db:
         state: dump
         login_user: "{{ db_user }}"
         login_password: "{{ db_password }}"
@@ -29,14 +29,14 @@
         target: "{{ mysql_dumps_target_folder }}/{{ db_name }}-{{ lookup('pipe','date +%Y-%m-%d_%H-%M-%S') }}.sql"
 
     - name: Find dumps older than 7 days
-      find:
+      ansible.builtin.find:
         paths: "{{ mysql_dumps_target_folder }}"
         age: 7d
       register: files_to_delete
       when: delete_old_files == "yes"
 
     - name: Delete previously found dumps
-      file:
+      ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
       with_items: "{{ files_to_delete.files }}"
